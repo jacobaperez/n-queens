@@ -135,30 +135,37 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
-    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow, fromRow) {
       var count = 0;
-      for(var i = 0; i < this.rows().length-majorDiagonalColumnIndexAtFirstRow; i++){
-        if(this.rows()[i][majorDiagonalColumnIndexAtFirstRow+i] === 1){
-          count++;
-          if(count > 1){
-            return true;
-          }
-        }
+      if ( fromRow === undefined ) {
+        fromRow = 0;
+      }
+      for(var i = 0; i < this.rows().length-majorDiagonalColumnIndexAtFirstRow; i++) {
+          if( this._isInBounds( (i + fromRow), (majorDiagonalColumnIndexAtFirstRow + i) ) ) {
+              if(this.rows()[i + fromRow][majorDiagonalColumnIndexAtFirstRow+i] === 1){
+                count++;
+                if(count > 1){
+                  return true;
+                }
+              }
+         }
       }
       return false;
+
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      //starting at 0,0
+      //top half of triangle
       for(var i = 0; i < this.rows().length-1; i++){
         if(this.hasMajorDiagonalConflictAt(i)){
             return true;
         }
       }
-      var newRows = this.rows();
-      for(var j = 1; i < this.rows().length-1; j++){
-        if(this.hasMajorDiagonalConflictAt(j)){
+
+      //check bottom triangle
+      for(var j = 1; j < this.rows().length-1; j++){
+        if(this.hasMajorDiagonalConflictAt(0, j)){
             return true;
         }
       }
