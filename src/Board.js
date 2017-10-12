@@ -194,7 +194,18 @@
         }
       }
       return false;
+    },
+
+    rookConflictAt: function(row, col) {
+      return !(!this.hasRowConflictAt(row) && !this.hasColConflictAt(col))
     }
+
+
+
+
+
+
+
 
     /*--------------------  End of Helper Functions  ---------------------*/
 
