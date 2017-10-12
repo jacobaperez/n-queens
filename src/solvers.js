@@ -36,6 +36,7 @@ window.findNRooksSolution = function(n) {
 window.countNRooksSolutions = function(n) {
   var solutionCount = 0;
   //create a board
+  var board = new Board({n:n});
 
   //recursive function takes in board
 
