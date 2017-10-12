@@ -72,24 +72,23 @@ window.countNQueensSolutions = function(n) {
   var solutionCount = 0;
 
   var board = new Board({n:n});
-
+  // one solution for n = 0, 1
   if (n === 0 || n === 1) {
-    return solutionCount++;
+    return 1;
   }
+  // no solution for n = 2, 3
   if (n === 2 || n === 3) {
-    return solutionCount;
+    return 0;
   }
-
   var findQueens = function(row) {
 
     if (row === n) {
       solutionCount++;
-      console.log('PLUP PLUP: YOU"VE GOT QUEEN MAIL: ' + solutionCount);
       return;
     }
     for (var i = 0; i < n; i++) {
       board.togglePiece(row, i);
-      if ( !board.hasRowConflictAt(row) && !board.hasColConflictAt(i) && !board.hasMinorDiagonalConflictAt(row) && !board.hasMajorDiagonalConflictAt(row)) {
+      if ( !board.hasAnyRowConflicts() && !board.hasAnyColConflicts() && !board.hasAnyMajorDiagonalConflicts() && !board.hasAnyMinorDiagonalConflicts() ) {
         findQueens(row + 1);
       }
       board.togglePiece(row, i);
