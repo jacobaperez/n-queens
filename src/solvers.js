@@ -12,6 +12,9 @@
 
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
+// window.findSolution(row, n, board, validator, callback) {
+//
+// }
 
 window.findNRooksSolution = function(n) {
   var solution = [];
@@ -46,7 +49,7 @@ window.countNRooksSolutions = function(n) {
         // toggle
         board.togglePiece(row, i);
         // if no conflict recurse into next branch
-        if (!board.hasRowConflictAt(row) && !board.hasColConflictAt(i)) {
+        if (!board.hasColConflictAt(i)) {
           recursive(row+1);
         }
         // untoggle
