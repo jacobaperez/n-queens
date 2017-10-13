@@ -33,7 +33,6 @@ window.findNRooksSolution = function(n) {
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   var solutionCount = 0;
-  //create a board
   var board = new Board({n:n});
 
     var recursive = function(row) {
@@ -61,7 +60,33 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = 0; //fixme
+  let solutionCount = 0;
+  var solution;
+  var board = new Board({n:n});
+  // no solution for n = 2, 3
+  if (n === 2 ) return [[0,0], [0,0]];
+  if (n === 3 ) return [[0,0,0], [0,0,0], [0,0,0]];
+
+
+  var findQueens = function(row) {
+    if (row === n) {
+      // console.log('board.rows: ' + board.rows().join('\t\n'));
+      solutionCount++;
+      //save a solution state of the board before recursing untoggled
+      solution = _.map(board.rows(), function(row){
+        return row.slice();
+      });
+      return;
+    }
+    for (var i = 0; i < n; i++) {
+      board.togglePiece(row, i);
+      if ( !board.hasAnyRowConflicts() && !board.hasAnyColConflicts() && !board.hasAnyMajorDiagonalConflicts() && !board.hasAnyMinorDiagonalConflicts() ) {
+        findQueens(row + 1);
+      }
+      board.togglePiece(row, i);
+    }
+  }
+  findQueens(0);
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
@@ -70,27 +95,28 @@ window.findNQueensSolution = function(n) {
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
   var solutionCount = 0;
-
   var board = new Board({n:n});
   // one solution for n = 0, 1
-  if (n === 0 || n === 1) {
+  if (n <= 1) {
     return 1;
   }
   // no solution for n = 2, 3
-  if (n === 2 || n === 3) {
+  if (n <= 3) {
     return 0;
   }
   var findQueens = function(row) {
-
+    //basecase we reached end of board (end of row) with piece toggled
     if (row === n) {
       solutionCount++;
       return;
     }
     for (var i = 0; i < n; i++) {
+      //toggle piece
       board.togglePiece(row, i);
       if ( !board.hasAnyRowConflicts() && !board.hasAnyColConflicts() && !board.hasAnyMajorDiagonalConflicts() && !board.hasAnyMinorDiagonalConflicts() ) {
         findQueens(row + 1);
       }
+      //untoggle piece
       board.togglePiece(row, i);
     }
   }
